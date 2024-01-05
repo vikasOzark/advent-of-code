@@ -1025,3 +1025,14 @@ number_map = {
     "eight" : "8",
     "nine" : "9",
 }
+identifier: list = [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+    ]
