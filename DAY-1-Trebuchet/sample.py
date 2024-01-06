@@ -1,52 +1,43 @@
-from practice import AdventDayOneTrebuchet, sample_string_two
-from question_input import number_map
+from practice import sample_string_two
+from question_input import number_map, identifier
 
 
-def test_sample_string_two():
-    string_list = ["wothree"] #sample_string_two.splitlines()
-    new_list = []
-
-    identifier: list = [
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine",
-    ]
+def solution():
+    string_array = sample_string_two.splitlines()
+    results = []
     
-    updated_string = ""
-    for string in string_list:
-        temp = ""
-        for letter in string:
-            sub_string = temp + letter
-            filtered_list = list(
-                filter(lambda val: val.startswith(sub_string), identifier)
+    for index,string in enumerate(string_array):
+
+        final_string = string
+        idx = 1
+        while idx <= len(final_string):
+            current_string = final_string[idx -1]
+            
+            filtered_list = filtered_list = list(
+                filter(lambda val: val.startswith(current_string), identifier)
             )
             
             if len(filtered_list) > 0:
-                temp += letter
-                updated_string += temp
-            else :
-                updated_string += sub_string
-                sub_string = ""
-                continue
                 
-            if len(filtered_list) == 1:
-                
-                if num := number_map.get(temp):
-                    updated_string += num 
-                    temp = ""
-                    continue
-                else:
-                    sub_string = ""
-                    temp = ""   
-                    continue
-        new_list.append(updated_string)
-        updated_string = ""
-    return new_list          
+                for item in filtered_list:
+                    item_length = len(item)
 
-print(test_sample_string_two())
+                    s = final_string[idx - 1]
+                    
+                    check_string = final_string[ idx - 1 : (idx - 1) + item_length]
+                    num_letter = number_map.get(check_string)
+                    
+                    if num_letter:
+                        stripped_string = final_string[((idx - 1) + item_length):]
+                        rest_string = final_string[:(idx - 1)]
+                        final_string = rest_string + num_letter + stripped_string
+                else:
+                    pass
+
+            idx += 1
+
+        results.append(final_string)
+        
+    return results
+
+print(solution())

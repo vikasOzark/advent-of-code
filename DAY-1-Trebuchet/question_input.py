@@ -999,8 +999,6 @@ qdgdrtx9onefourdcvctldjnpcdjbc
 cjxkxsgmql4xxgjtpdcbmsixeight
 739"""
 
-
-
 sample_string_one = """1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
@@ -1025,3 +1023,15 @@ number_map = {
     "eight" : "8",
     "nine" : "9",
 }
+
+identifier: list = [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+    ]

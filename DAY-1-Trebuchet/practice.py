@@ -1,5 +1,5 @@
 # from . import question_input
-from question_input import QUESTION_INPUT, sample_string_two, number_map
+from question_input import QUESTION_INPUT, sample_string_two, number_map, identifier
 
 class AdventDayOneTrebuchet:
     "This class is used to solve the advent of code question Day 1: Trebuchet"
@@ -7,6 +7,7 @@ class AdventDayOneTrebuchet:
     def __init__(self, input_string: str):
         self.input_string: str = input_string
         self.digits: int = 0
+        self.combined_numbers = []
 
     def is_number_contains(self) -> bool:
         """This method is used to check if the input string contains a number"
@@ -18,7 +19,7 @@ class AdventDayOneTrebuchet:
         ]
         return any(is_number_contains)
 
-    def calculate_result(self, input_string: list[str] = None) -> int:
+    def calculate_result(self) -> int:
         """This method is used to extract the digits from the input string and combined
         digit.
         :RETURNS
@@ -28,63 +29,49 @@ class AdventDayOneTrebuchet:
         if not self.is_number_contains():
             return False
 
-        # print(f"Input string: {self.input_string}")
-        new_string = input_string or self.input_string.splitlines()
-
-        splitted_string: list[str] = new_string
-        for string in splitted_string:
+        
+        for string in self.input_string:
             number_string: str = [num for num in list(string) if num.isnumeric()]
             combined_digit = str(number_string[0]) + str(number_string[-1])
-            print(f" {string} -> {combined_digit}") , 
+            print(f" {string} -> {combined_digit}")
+            self.combined_numbers.append(int(combined_digit))
             self.digits += int(combined_digit)
-            
-        return self.digits
+        return (self.digits, self.combined_numbers)
 
-    def convert_letter(self) -> list[str]:
-        string_list = self.input_string.splitlines()
-        new_list = []
-
-        identifier: list = [
-            "one",
-            "two",
-            "three",
-            "four",
-            "five",
-            "six",
-            "seven",
-            "eight",
-            "nine",
-        ]
+    def solution_two(self):
+        string_array = self.input_string.splitlines()
+        results = []
         
-        updated_string = ""
-        for string in string_list:
-            temp = ""
-            for letter in string:  # -> letter : e
-                sub_string = temp + letter
-                filtered_list = list(
-                    filter(lambda val: val.startswith(sub_string), identifier)
+        for index, string in enumerate(string_array):
+            final_string = string
+            idx = 1
+            while idx <= len(final_string):
+                current_string = final_string[idx -1]
+                
+                filtered_list = filtered_list = list(
+                    filter(lambda val: val.startswith(current_string), identifier)
                 )
+                
                 if len(filtered_list) > 0:
-                    temp = temp + letter
-                else :
-                    updated_string += letter
-                    continue
                     
-                if len(filtered_list) == 1:
-                    
-                    if num := number_map.get(temp):
-                        updated_string += num 
-                        temp = ""
-                        continue
-                    else:
-                        continue
-            new_list.append(updated_string)
-            updated_string = ""
-        return new_list   
+                    for item in filtered_list:
+                        item_length = len(item)
+                        
+                        check_string = final_string[ idx - 1 : (idx - 1) + item_length]
+                        num_letter = number_map.get(check_string)
+                        
+                        if num_letter:
+                            stripped_string = final_string[((idx - 1) + item_length):]
+                            rest_string = final_string[:(idx - 1)]
+                            final_string = rest_string + num_letter + stripped_string
+                idx += 1
+
+            results.append(final_string)
+        self.input_string = results
+        return results
     
 if __name__ == "__main__" :
-    # 29, 83, 13, 24, 42, 14, and 76
-    solution = AdventDayOneTrebuchet(sample_string_two)
-    li_string = solution.convert_letter()
-    print(li_string)
-    print(solution.calculate_result(li_string))
+    solution = AdventDayOneTrebuchet(QUESTION_INPUT)
+    solution.solution_two()
+    total, li = solution.calculate_result()
+    print(li)
